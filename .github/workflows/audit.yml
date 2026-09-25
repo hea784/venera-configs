@@ -1,0 +1,29 @@
+name: Audit extra sources
+
+on:
+  push:
+    paths:
+      - "_extra_sources.json"
+      - "dm5.js"
+      - "mangabz.js"
+      - "one_kkk.js"
+      - "yemancomic.js"
+      - "scripts/audit.mjs"
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run audit
+        run: node scripts/audit.mjs

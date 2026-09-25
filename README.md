@@ -12,6 +12,9 @@ https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/index.json
 
 ## 工作方式
 
+**审计已流水线化**：[audit workflow](.github/workflows/audit.yml) 在扩展源文件变动、PR 与每周定时触发，
+逐文件做语法校验、域名白名单核对与危险模式扫描，不过则 CI 直接失败（报告见 Actions Summary）。
+
 - **上游源**（拷贝漫画、MangaDex、comick 等）：`index.json` 中带有指向
   上游 jsdelivr 的 `url` 直链，永远跟随上游最新版本；本仓库另有快照兜底。
   每周一由 [sync-upstream workflow](.github/workflows/sync-upstream.yml)

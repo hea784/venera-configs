@@ -23,6 +23,9 @@ jobs:
           for e in upstream:
               e["url"] = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/" + e["fileName"]
           extra = json.load(open("_extra_sources.json", encoding="utf-8"))
+          for e in extra:
+              # internal audit metadata, not part of the app index schema
+              e.pop("allowedDomains", None)
 
           json.dump(upstream + extra, open("index.json", "w", encoding="utf-8"),
                     ensure_ascii=False, indent=2)
