@@ -1,0 +1,41 @@
+name: Sync upstream source list
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate index.json from upstream + extras
+        run: |
+          python3 - <<'EOF'
+          import json, urllib.request
+
+          upstream = json.load(urllib.request.urlopen(
+              "https://raw.githubusercontent.com/venera-app/venera-configs/main/index.json"))
+          for e in upstream:
+              e["url"] = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/" + e["fileName"]
+          extra = json.load(open("_extra_sources.json", encoding="utf-8"))
+
+          json.dump(upstream + extra, open("index.json", "w", encoding="utf-8"),
+                    ensure_ascii=False, indent=2)
+          print("entries:", len(upstream) + len(extra))
+          EOF
+      - name: Commit and push if changed
+        run: |
+          git config user.name "hea784"
+          git config user.email "hea784@users.noreply.github.com"
+          if git diff --quiet index.json; then
+            echo "No changes"
+          else
+            git add index.json
+            git commit -m "sync: update upstream source list"
+            git push
+          fi

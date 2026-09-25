@@ -1,0 +1,30 @@
+[
+  {
+    "name": "动漫屋",
+    "fileName": "dm5.js",
+    "key": "dm5",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.dm5.com"
+  },
+  {
+    "name": "Mangabz",
+    "fileName": "mangabz.js",
+    "key": "mangabz",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 mangabz.com"
+  },
+  {
+    "name": "极速漫画",
+    "fileName": "one_kkk.js",
+    "key": "one_kkk",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.1kkk.com"
+  },
+  {
+    "name": "野蛮漫画",
+    "fileName": "yemancomic.js",
+    "key": "yemancomic",
+    "version": "0.1.2",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 yemancomic.com"
+  }
+]
