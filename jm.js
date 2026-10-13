@@ -7,7 +7,7 @@ class JM extends ComicSource {
     // unique id of the source
     key = "jm"
 
-    version = "1.4.0"
+    version = "1.4.1"
 
     minAppVersion = "1.5.0"
 
@@ -16,15 +16,16 @@ class JM extends ComicSource {
     static jmPkgName = "com.example.app"
 
     // update url
-    url = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/jm.js"
+    url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
 
     dailyCheckInInProgress = false
 
+    // 2026-10-13 实测存活线路（旧 cdntwice/cdnsha/cdnaspa/cdnntr 已全部 404/超时）
     static fallbackServers = [
-        "www.cdntwice.org",
-        "www.cdnsha.org",
-        "www.cdnaspa.cc",
-        "www.cdnntr.cc",
+        "www.cdnhjk.net",
+        "www.cdngwc.cc",
+        "www.cdngwc.net",
+        "www.cdngwc.club",
     ];
 
     static imageUrl = "https://cdn-msp.jmapinodeudzn.net"
@@ -134,12 +135,12 @@ class JM extends ComicSource {
         let domains = []
         let res = null;
         try {
-            res = await fetch(url, { headers: this.baseHeaders });
+            res = await Network.get(url, this.baseHeaders)
         } catch (error) {
             res = null;
         }
         if (res && res.status === 200) {
-            let data = this.convertData(await res.text(), domainSecret)
+            let data = this.convertData(res.body, domainSecret)
             let json = JSON.parse(data)
             if (json["Server"]) {
                 title = "Update Success"
@@ -190,10 +191,49 @@ class JM extends ComicSource {
         )
         let setting = JSON.parse(res)
         if (setting["img_host"]) {
-            if (showMessage) {
-                UI.showMessage(`Image Stream ${index}:\n${setting["img_host"]}`)
+            let host = setting["img_host"]
+            // 分流接口会在多个图床间随机轮换，其中有已下线的死节点；
+            // 命中死图床会导致整个源图片加载失败，所以先探活再落盘。
+            if (await this.isImageHostAlive(host)) {
+                if (showMessage) {
+                    UI.showMessage(`Image Stream ${index}:\n${host}`)
+                }
+                this.overwriteImgUrl(host)
+            } else {
+                // 探活失败：轮询其余分流拿一个活图床，全部失败则不动现有配置
+                for (let i of [1, 2, 3, 4]) {
+                    if (i == index) continue
+                    try {
+                        let alt = JSON.parse(await this.get(
+                            `${this.baseUrl}/setting?app_img_shunt=${i}&express=`
+                        ))
+                        if (alt["img_host"] && alt["img_host"] !== host && await this.isImageHostAlive(alt["img_host"])) {
+                            if (showMessage) {
+                                UI.showMessage(`Image Stream ${index} failed, using stream ${i}:\n${alt["img_host"]}`)
+                            }
+                            this.overwriteImgUrl(alt["img_host"])
+                            return
+                        }
+                    } catch (e) { }
+                }
+                if (showMessage) {
+                    UI.showMessage(`Image host check failed for all streams, keeping current setting`)
+                }
             }
-            this.overwriteImgUrl(setting["img_host"])
+        }
+    }
+
+    /**
+     * Probe an image host with a real cover request (HEAD + small read timeout)
+     * @param host {string} - full origin, e.g. "https://cdn-msp.jmapiproxy3.cc"
+     * @returns {Promise<boolean>}
+     */
+    async isImageHostAlive(host) {
+        try {
+            let res = await Network.get(`${host}/media/albums/1_3x4.jpg`, this.getImgHeaders())
+            return res.status === 200
+        } catch (e) {
+            return false
         }
     }
 

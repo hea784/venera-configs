@@ -39,5 +39,31 @@
     "allowedDomains": [
       "yemancomic.com"
     ]
+  },
+  {
+    "name": "禁漫天堂",
+    "fileName": "jm.js",
+    "key": "jm",
+    "version": "1.4.1",
+    "description": "18comic 源。安全审计：2026-10-13，含 API 域名分发接口与图片 CDN（域名运行时动态更新）",
+    "allowedDomains": [
+      "cdn.jsdelivr.net",
+      "cdn-msp.jmapinodeudzn.net",
+      "rup4a04-c02.tos-cn-hongkong.bytepluses.com",
+      "cdn-msp.jmapiproxy3.cc",
+      "www.cdnhjk.net",
+      "www.cdngwc.cc",
+      "www.cdngwc.net",
+      "www.cdngwc.club",
+      "cdn-msp2.jmdanjonproxy.vip",
+      "cdn-msp3.jmdanjonproxy.xyz",
+      "tencent.jmdanjonproxy.xyz",
+      "cdn-msp.jmdanjonproxy.vip",
+      "cdn-msp2.jmapiproxy1.cc",
+      "cdn-msp3.jmapiproxy1.cc",
+      "cdn-msp2.jmapiproxy3.cc",
+      "cdn-msp3.jmapiproxy3.cc",
+      "localhost"
+    ]
   }
 ]

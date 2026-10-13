@@ -60,9 +60,9 @@
     "name": "禁漫天堂",
     "fileName": "jm.js",
     "key": "jm",
-    "version": "1.4.0",
-    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流",
-    "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/jm.js"
+    "version": "1.4.1",
+    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流 (fork 修复线路+图床探活)",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
   },
   {
     "name": "MangaDex",

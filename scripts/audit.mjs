@@ -21,6 +21,9 @@ const UNPACKER_EVAL = /eval\(\s*\w+\.replace\(\s*\/\^eval\/\s*,\s*(["'])\s*\1\s*
 function extractHosts(code) {
   const hosts = new Set();
   for (const match of code.matchAll(/https?:\/\/[^"'\s\\)]+/g)) {
+    // template-literal interpolation (https://${...}) is not a real hostname;
+    // the actual domains live in JM.apiDomains/fallbackServers, allowlisted separately
+    if (match[0].includes("${")) continue;
     try {
       hosts.add(new URL(match[0]).hostname);
     } catch {
