@@ -3,13 +3,13 @@
     "name": "拷贝漫画",
     "fileName": "copy_manga.js",
     "key": "copy_manga",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/copy_manga.js"
   },
   {
     "name": "拷贝漫画(多账号)",
     "fileName": "copy_manga_multi_accounts.js",
-    "key": "copy_manga",
+    "key": "copy_manga_multi_accounts",
     "version": "1.4.1",
     "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/copy_manga_multi_accounts.js"
   },
@@ -60,9 +60,9 @@
     "name": "禁漫天堂",
     "fileName": "jm.js",
     "key": "jm",
-    "version": "1.4.1",
-    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流 (fork 修复线路+图床探活)",
-    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
+    "version": "1.4.0",
+    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流",
+    "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/jm.js"
   },
   {
     "name": "MangaDex",
@@ -262,5 +262,12 @@
     "key": "yemancomic",
     "version": "0.1.2",
     "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 yemancomic.com"
+  },
+  {
+    "name": "禁漫天堂",
+    "fileName": "jm.js",
+    "key": "jm",
+    "version": "1.4.1",
+    "description": "18comic 源。安全审计：2026-10-13，含 API 域名分发接口与图片 CDN（域名运行时动态更新）"
   }
 ]
