@@ -4,9 +4,10 @@
     "fileName": "dm5.js",
     "key": "dm5",
     "version": "0.2.0",
-    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.dm5.com",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.dm5.com；更新地址走 fork jsDelivr",
     "allowedDomains": [
-      "m.dm5.com"
+      "m.dm5.com",
+      "cdn.jsdelivr.net"
     ]
   },
   {
@@ -14,10 +15,11 @@
     "fileName": "mangabz.js",
     "key": "mangabz",
     "version": "0.2.0",
-    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 mangabz.com",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 mangabz.com；更新地址走 fork jsDelivr",
     "allowedDomains": [
       "www.mangabz.com",
-      "mangabz.com"
+      "mangabz.com",
+      "cdn.jsdelivr.net"
     ]
   },
   {
@@ -25,9 +27,10 @@
     "fileName": "one_kkk.js",
     "key": "one_kkk",
     "version": "0.2.0",
-    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.1kkk.com",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 m.1kkk.com；更新地址走 fork jsDelivr",
     "allowedDomains": [
-      "m.1kkk.com"
+      "m.1kkk.com",
+      "cdn.jsdelivr.net"
     ]
   },
   {
@@ -35,9 +38,10 @@
     "fileName": "yemancomic.js",
     "key": "yemancomic",
     "version": "0.1.2",
-    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 yemancomic.com",
+    "description": "免费中文漫画站。安全审计：2026-09-25，仅连接 yemancomic.com；更新地址走 fork jsDelivr",
     "allowedDomains": [
-      "yemancomic.com"
+      "yemancomic.com",
+      "cdn.jsdelivr.net"
     ]
   },
   {

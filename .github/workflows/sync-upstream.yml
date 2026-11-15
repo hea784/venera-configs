@@ -13,23 +13,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Regenerate index.json from upstream + extras
+      - name: Regenerate index.json from upstream + overrides
         run: |
           python3 - <<'EOF'
           import json, urllib.request
 
           upstream = json.load(urllib.request.urlopen(
               "https://raw.githubusercontent.com/venera-app/venera-configs/main/index.json"))
-          for e in upstream:
-              e["url"] = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/" + e["fileName"]
-          extra = json.load(open("_extra_sources.json", encoding="utf-8"))
-          for e in extra:
-              # internal audit metadata, not part of the app index schema
-              e.pop("allowedDomains", None)
+          # _source_overrides.json is the fork-managed channel: entries here
+          # replace same-key upstream entries (fork fix wins) and are appended
+          # with their own url/version. _extra_sources.json is audit metadata
+          # only and never enters the index directly.
+          overrides = json.load(open("_source_overrides.json", encoding="utf-8"))
+          by_key = {e["key"]: e for e in overrides}
 
-          json.dump(upstream + extra, open("index.json", "w", encoding="utf-8"),
+          result = []
+          skipped = []
+          for e in upstream:
+              if e["key"] in by_key:
+                  skipped.append(e["key"])
+                  continue
+              e["url"] = "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/" + e["fileName"]
+              result.append(e)
+
+          result.extend(overrides)
+
+          json.dump(result, open("index.json", "w", encoding="utf-8"),
                     ensure_ascii=False, indent=2)
-          print("entries:", len(upstream) + len(extra))
+          print("entries:", len(result),
+                "| fork-managed:", sorted(by_key),
+                "| upstream overridden:", sorted(skipped))
           EOF
       - name: Commit and push if changed
         run: |

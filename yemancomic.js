@@ -4,7 +4,7 @@ class YemanComicSource extends ComicSource {
     key = "yemancomic"
     version = "0.1.2"
     minAppVersion = "1.6.0"
-    url = "https://yemancomic.com"
+    url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/yemancomic.js"
 
     get baseUrl() { return "https://yemancomic.com" }
 

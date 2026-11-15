@@ -4,7 +4,7 @@ class Dm5Source extends ComicSource {
     key = "dm5"
     version = "0.2.0"
     minAppVersion = "1.6.0"
-    url = "https://m.dm5.com"
+    url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/dm5.js"
 
     get baseUrl() { return "https://m.dm5.com" }
 

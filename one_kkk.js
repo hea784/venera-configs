@@ -4,7 +4,7 @@ class OneKkkSource extends ComicSource {
     key = "one_kkk"
     version = "0.2.0"
     minAppVersion = "1.6.0"
-    url = "https://m.1kkk.com"
+    url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/one_kkk.js"
 
     get baseUrl() { return "https://m.1kkk.com" }
 

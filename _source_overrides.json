@@ -1,0 +1,66 @@
+[
+  {
+    "name": "拷贝漫画",
+    "fileName": "copy_manga.js",
+    "key": "copy_manga",
+    "version": "1.4.4",
+    "description": "同步上游 #341 修复（每次请求后清除设备信息）。上游修复未升版本号导致已装用户收不到更新，由 fork 升版分发。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/copy_manga.js"
+  },
+  {
+    "name": "拷贝漫画(多账号)",
+    "fileName": "copy_manga_multi_accounts.js",
+    "key": "copy_manga_multi_accounts",
+    "version": "1.4.2",
+    "description": "同步上游 #335 修复（id 冲突）。上游修复未升版本号，由 fork 升版分发。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/copy_manga_multi_accounts.js"
+  },
+  {
+    "name": "紳士漫畫",
+    "fileName": "wnacg.js",
+    "key": "wnacg",
+    "version": "1.0.7",
+    "description": "同步上游 #339 修复（合集阅读与收藏夹加载）。上游修复未升版本号，由 fork 升版分发。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/wnacg.js"
+  },
+  {
+    "name": "禁漫天堂",
+    "fileName": "jm.js",
+    "key": "jm",
+    "version": "1.4.1",
+    "description": "18comic 源。fork 修复：新线路 fallback + 图床探活（随机图床命中死节点时整源图片挂）。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
+  },
+  {
+    "name": "动漫屋",
+    "fileName": "dm5.js",
+    "key": "dm5",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/dm5.js"
+  },
+  {
+    "name": "Mangabz",
+    "fileName": "mangabz.js",
+    "key": "mangabz",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/mangabz.js"
+  },
+  {
+    "name": "极速漫画",
+    "fileName": "one_kkk.js",
+    "key": "one_kkk",
+    "version": "0.2.0",
+    "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/one_kkk.js"
+  },
+  {
+    "name": "野蛮漫画",
+    "fileName": "yemancomic.js",
+    "key": "yemancomic",
+    "version": "0.1.2",
+    "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
+    "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/yemancomic.js"
+  }
+]
