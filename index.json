@@ -233,8 +233,8 @@
     "name": "禁漫天堂",
     "fileName": "jm.js",
     "key": "jm",
-    "version": "1.4.1",
-    "description": "18comic 源。fork 修复：新线路 fallback + 图床探活（随机图床命中死节点时整源图片挂）。",
+    "version": "1.4.2",
+    "description": "18comic 源。fork 修复：域名默认初值消除 baseUrl 崩溃 + 剔除 newsvr 下发死节点(cdnbtd.cc TLS eof) + 图床探活。",
     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
   },
   {

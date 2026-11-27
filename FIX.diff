@@ -1,0 +1,112 @@
+diff --git a/_source_overrides.json b/_source_overrides.json
+index ce29214..c91b007 100644
+--- a/_source_overrides.json
++++ b/_source_overrides.json
+@@ -27,8 +27,8 @@
+     "name": "禁漫天堂",
+     "fileName": "jm.js",
+     "key": "jm",
+-    "version": "1.4.1",
+-    "description": "18comic 源。fork 修复：新线路 fallback + 图床探活（随机图床命中死节点时整源图片挂）。",
++    "version": "1.4.2",
++    "description": "18comic 源。fork 修复：域名默认初值消除 baseUrl 崩溃 + 剔除 newsvr 下发死节点(cdnbtd.cc TLS eof) + 图床探活。",
+     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
+   },
+   {
+diff --git a/index.json b/index.json
+index 78d8472..aaa4448 100644
+--- a/index.json
++++ b/index.json
+@@ -233,8 +233,8 @@
+     "name": "禁漫天堂",
+     "fileName": "jm.js",
+     "key": "jm",
+-    "version": "1.4.1",
+-    "description": "18comic 源。fork 修复：新线路 fallback + 图床探活（随机图床命中死节点时整源图片挂）。",
++    "version": "1.4.2",
++    "description": "18comic 源。fork 修复：域名默认初值消除 baseUrl 崩溃 + 剔除 newsvr 下发死节点(cdnbtd.cc TLS eof) + 图床探活。",
+     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
+   },
+   {
+diff --git a/jm.js b/jm.js
+index d710e6f..2967a84 100644
+--- a/jm.js
++++ b/jm.js
+@@ -7,7 +7,7 @@ class JM extends ComicSource {
+     // unique id of the source
+     key = "jm"
+ 
+-    version = "1.4.1"
++    version = "1.4.2"
+ 
+     minAppVersion = "1.5.0"
+ 
+@@ -28,6 +28,17 @@ class JM extends ComicSource {
+         "www.cdngwc.club",
+     ];
+ 
++    // newsvr 会下发已失效线路：cdnbtd.cc 出现 TLS handshake eof（使用者日志），
++    // 命中即整源不可用。这些域名永久剔除，不进入 apiDomains。
++    static deadServers = [
++        "www.cdnbtd.cc",
++        "www.cdnutc.cc",
++    ];
++
++    // apiDomains 必须始终有初值：baseUrl 可能在 refreshApiDomains 完成前就被
++    // loadInfo 访问（日志里 JS 错误比 newsvr 响应早 730ms），undefined 会直接崩溃。
++    static apiDomains = ["www.cdngwc.net", "www.cdngwc.club", "www.cdnhjk.net", "www.cdngwc.cc"]
++
+     static imageUrl = "https://cdn-msp.jmapinodeudzn.net"
+ 
+     static ua = "Mozilla/5.0 (Linux; Android 10; K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/130.0.0.0 Mobile Safari/537.36"
+@@ -38,7 +49,9 @@ class JM extends ComicSource {
+ 
+     get baseUrl() {
+         let index = parseInt(this.loadSetting('apiDomain')) - 1
+-        return `https://${JM.apiDomains[index]}`
++        let domains = JM.apiDomains && JM.apiDomains.length ? JM.apiDomains : JM.fallbackServers
++        let domain = domains[index] || domains[0]
++        return `https://${domain}`
+     }
+ 
+     get imageUrl() {
+@@ -46,7 +59,9 @@ class JM extends ComicSource {
+     }
+ 
+     overwriteApiDomains(domains) {
+-        if (domains.length != 0) JM.apiDomains = domains
++        // 过滤 newsvr 下发的死节点；过滤后为空则保留内置线路，绝不写空数组。
++        let healthy = domains.filter(d => !JM.deadServers.includes(d))
++        if (healthy.length != 0) JM.apiDomains = healthy
+     }
+ 
+     overwriteImgUrl(url) {
+@@ -119,7 +134,12 @@ class JM extends ComicSource {
+ 
+     async init() {
+         if (this.loadSetting('refreshDomainsOnStart')) await this.refreshApiDomains(false)
+-        this.refreshImgUrl(false)
++        // 图床刷新依赖网络请求，节点 TLS 失败不应阻塞整个源加载。
++        try {
++            await this.refreshImgUrl(false)
++        } catch (e) {
++            // 保留内置图床，静默降级（imageUrl 已有默认初值）。
++        }
+     }
+ 
+     /**
+@@ -145,7 +165,13 @@ class JM extends ComicSource {
+             if (json["Server"]) {
+                 title = "Update Success"
+                 message = "\n"
+-                servers = json["Server"].slice(0, 4)
++                // 剔除下发列表里的死节点，不足 4 条时用内置线路补齐，
++                // 保证 apiDomain 的 1-4 选项都指向可达域名。
++                servers = json["Server"].filter(d => !JM.deadServers.includes(d))
++                for (let d of JM.fallbackServers) {
++                    if (servers.length >= 4) break
++                    if (!servers.includes(d)) servers.push(d)
++                }
+             }
+         }
+         if (servers.length === 0) {
