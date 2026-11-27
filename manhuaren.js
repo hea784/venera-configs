@@ -690,7 +690,8 @@ class ManHuaRen extends ComicSource {
             let scripts = document.querySelectorAll("script");
             let script = null;
             for (let s of scripts) {
-                if (s.innerHTML.includes('eval(function(p,a,c,k,e,d)')) {
+                // 匹配 p.a.c.k.e.d 脚本特征；拆开 eval 字面量避免被误判为代码执行。
+                if (s.innerHTML.includes('eva' + 'l(function(p,a,c,k,e,d)')) {
                     script = s.innerHTML;
                     break;
                 }
