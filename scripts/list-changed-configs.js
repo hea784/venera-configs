@@ -29,6 +29,10 @@ function isConfigFile(filePath) {
   if (!filePath.endsWith(".js")) {
     return false;
   }
+  // 配置源只在仓库根目录；scripts/ 等子目录的工具脚本不是漫画源配置。
+  if (filePath.includes("/") || filePath.includes("\\")) {
+    return false;
+  }
   const baseName = path.basename(filePath);
   return !baseName.startsWith("_");
 }
