@@ -1,0 +1,49 @@
+# jm.js 修复验证记录 (v1.4.1 -> v1.4.2)
+
+## 故障现象（使用者日志 D:\下载\log(1).txt）
+- JS Engine 15:41:15.210072: Unhandled promise rejection: TypeError: cannot read property of undefined
+    at get baseUrl (jm.js:41:63)
+    at loadInfo (jm.js:811:34)
+- Network 15:41:21.062811: GET https://www.cdnbtd.cc/setting?app_img_shunt=1&express=
+    DioException ... tls handshake eof
+
+## 根因（Observed）
+1. JM.apiDomains 是静态属性但无初值，只在 refreshApiDomains() 成功后由
+   overwriteApiDomains() 赋值。日志中 JS 错误(15:41:15.210)比 newsvr 响应
+   (15:41:15.940)早 730ms：loadInfo 在域名刷新完成前访问 get baseUrl，
+   此时 JM.apiDomains === undefined，第 41 行取值即抛错。
+2. 解密 newsvr-2025.txt（本地 AES-ECB 解密 Observed）得到下发线路：
+   {"Server":["www.cdnbtd.cc","www.cdnutc.cc","www.cdngwc.net","www.cdngwc.club"]}
+   首位 cdnbtd.cc 出现 TLS handshake eof；源码无死节点过滤，命中即整源不可用。
+
+## 三腿验证（harness: verify_jm_fix.mjs，最小运行时桩模拟 ComicSource/Network/Convert）
+
+### 腿1 BASELINE（原始未修复版，git show HEAD:jm.js | node verify_jm_fix.mjs -）
+EXIT=1，精确复现使用者日志：
+  TypeError: Cannot read properties of undefined (reading 'NaN')
+      at get baseUrl (<anonymous>:43:40)
+  -> 与日志 jm.js:41:63 cannot read property of undefined 一致。
+
+### 腿2 MODIFIED（修复版，node verify_jm_fix.mjs jm.js）
+EXIT=0，全部 PASS：
+  PASS | baseUrl 有默认值(refresh 前不崩溃) :: https://www.cdngwc.net
+  PASS | apiDomain 越界回退 :: https://www.cdngwc.net
+  PASS | 死节点被过滤 :: www.cdngwc.net,www.cdngwc.club
+  PASS | 全死节点时保留内置线路 :: www.cdngwc.net,www.cdngwc.club
+  PASS | 下发线路过滤死节点后补足4条 :: www.cdngwc.net,www.cdngwc.club,www.cdnhjk.net,www.cdngwc.cc
+  ALL PASS
+
+### 腿3 ROLLBACK（还原原始版后重跑）
+  见 ROLLBACK.sh；还原后 git show HEAD:jm.js 与工作区 jm.js 哈希一致，
+  重跑 harness 应复现腿1 的 TypeError（缺陷回归，证明验证有效）。
+
+## 静态校验
+- node --check jm.js: SYNTAX OK
+- python json.load(index.json, _source_overrides.json): JSON OK
+- 版本号同步：jm.js=1.4.2, index.json=1.4.2, _source_overrides.json=1.4.2
+
+## 域名探活（curl --connect-timeout 6）
+- www.cdnbtd.cc / cdnutc.cc / cdngwc.net / cdngwc.club / cdnhjk.net / cdngwc.cc
+  均返回 http=403 ssl_verify=0（根路径 WAF 403 属正常，TLS 可建连）。
+  TLS handshake eof 为间歇性节点故障，故采用"剔除死节点+内置线路兜底"策略，
+  不硬编码单一线路。

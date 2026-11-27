@@ -2,7 +2,7 @@
 class Dm5Source extends ComicSource {
     name = "动漫屋"
     key = "dm5"
-    version = "0.2.0"
+    version = "0.2.1"
     minAppVersion = "1.6.0"
     url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/dm5.js"
 
@@ -86,7 +86,15 @@ class Dm5Source extends ComicSource {
         if (!m) return []
         try {
             let packed = m[0].replace(/<\/script>/i, "")
-            let unpacked = eval(packed.replace(/^eval/, ""))
+            // 纯 JS 解包 p.a.c.k.e.d（base-36 字典替换），不用 eval 执行远端脚本。
+            let args = packed.match(/\}\('([\s\S]*?)',(\d+),(\d+),'([^']*)'\.split\('\|'\)\)/)
+            if (!args) return []
+            let p = args[1], a = parseInt(args[2]), c = parseInt(args[3])
+            let k = args[4].split('|')
+            let enc = (n) => (n < a ? '' : enc(parseInt(n / a))) + ((n = n % a) > 35 ? String.fromCharCode(n + 29) : n.toString(36))
+            let dict = {}
+            while (c--) dict[enc(c)] = k[c] || enc(c)
+            let unpacked = p.replace(/\b\w+\b/g, w => dict[w] || w)
             let images = unpacked.match(/https?:\/\/[^'"]+/g) || []
             return images.filter(u => /\.(jpg|jpeg|png|webp|gif)(\?|$)/i.test(u))
         } catch (e) {

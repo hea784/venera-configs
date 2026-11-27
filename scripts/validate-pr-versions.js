@@ -39,7 +39,13 @@ if (touchedFiles.size === 0) {
 const errors = [];
 
 for (const fileName of [...touchedFiles].sort()) {
-  const filePath = path.join(repoRoot, fileName);
+  // fileName 来自 index.json / PR 变更列表：只允许仓库根下的普通文件名。
+  // 用严格白名单替代 path.join，静态可判地排除 ../、绝对路径与子目录穿越。
+  if (!/^[A-Za-z0-9._-]+\.js$/.test(fileName)) {
+    errors.push(`${fileName}: unsafe file name in index.json / change list.`);
+    continue;
+  }
+  const filePath = repoRoot + path.sep + fileName;
   const currentEntry = currentByFile.get(fileName);
   const baseEntry = baseByFile.get(fileName);
 
@@ -146,6 +152,11 @@ function diffIndexEntries(baseByFile, currentByFile) {
 
 function isConfigFile(filePath) {
   if (!filePath.endsWith(".js")) {
+    return false;
+  }
+  // 配置源只位于仓库根目录；scripts/ 等子目录里的工具脚本不是配置源，
+  // 不应参与版本校验（之前会把本脚本自身当配置源而误报）。
+  if (filePath.includes("/") || filePath.includes("\\")) {
     return false;
   }
   const baseName = path.basename(filePath);

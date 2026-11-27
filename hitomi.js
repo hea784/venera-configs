@@ -469,8 +469,23 @@ async function get_image_srcs(files) {
     throw new Error(resp.status);
   }
 
-  eval(resp.body);
-  if (!gg.b) throw new Error();
+  // gg.js 是站点下发的纯数据脚本，结构固定：m() 是一个 case 映射，
+  // s() 是固定算法，b 是字符串。不用动态执行远端代码：解析 case 集合与 b，
+  // 改为查表 + 内联算法，行为等价。
+  const mBody = resp.body.match(/m:\s*function\(g\)\s*\{([\s\S]*?)\n\}/);
+  const bMatch = resp.body.match(/b:\s*'([^']*)'/);
+  if (!mBody || !bMatch || !bMatch[1]) throw new Error('unexpected gg.js format');
+  const oneIdx = mBody[1].indexOf('o = 1; break;');
+  if (oneIdx < 0) throw new Error('unexpected gg.js m() format');
+  const ones = new Set(
+    [...mBody[1].substring(0, oneIdx).matchAll(/case\s+(\d+):/g)].map(x => parseInt(x[1]))
+  );
+  const b = bMatch[1];
+  const gg = {
+    m: (g) => (ones.has(g) ? 1 : 0),
+    s: (h) => { const mm = h.match(/(..)(.)$/); return parseInt(mm[2] + mm[1], 16).toString(10); },
+    b: b,
+  };
 
   const subdomain_from_url = (url, base, dir) => {
     var retval = "";
@@ -995,7 +1010,7 @@ class Hitomi extends ComicSource {
   // unique id of the source
   key = "hitomi";
 
-  version = "1.1.2";
+  version = "1.1.3";
 
   minAppVersion = "1.4.6";
 

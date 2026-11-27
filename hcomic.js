@@ -5,7 +5,7 @@ class HComic extends ComicSource {
     // Unique id of the source
     key = "hcomic"
 
-    version = "1.0.0"
+    version = "1.0.1"
 
     minAppVersion = "1.6.0"
 
@@ -41,14 +41,15 @@ class HComic extends ComicSource {
                 let json = JSON.parse(fixedJsonStr);
                 return json.data;
             } catch (e) {
-                console.error("Failed to parse JSON", e);
+                // 尾逗号等导致的解析失败：清理后再试一次，不用 new Function 执行远端内容。
                 try {
-                    // Fallback to new Function if JSON.parse fails (e.g. trailing commas)
-                    let fn = new Function("return " + jsonStr);
-                    let json = fn();
+                    let cleaned = jsonStr
+                        .replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":')
+                        .replace(/,\s*([}\]])/g, '$1');
+                    let json = JSON.parse(cleaned);
                     return json.data;
                 } catch (e2) {
-                    console.error("Failed to eval", e2);
+                    console.error("Failed to parse JSON after cleanup", e2);
                 }
             }
         }

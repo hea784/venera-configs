@@ -60,7 +60,7 @@
     "name": "hitomi.la",
     "fileName": "hitomi.js",
     "key": "hitomi",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/hitomi.js"
   },
   {
@@ -158,14 +158,14 @@
     "name": "漫画人",
     "fileName": "manhuaren.js",
     "key": "manhuaren",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/manhuaren.js"
   },
   {
     "name": "H-Comic",
     "fileName": "hcomic.js",
     "key": "hcomic",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "url": "https://cdn.jsdelivr.net/gh/venera-app/venera-configs@main/hcomic.js"
   },
   {
@@ -233,15 +233,15 @@
     "name": "禁漫天堂",
     "fileName": "jm.js",
     "key": "jm",
-    "version": "1.4.1",
-    "description": "18comic 源。fork 修复：新线路 fallback + 图床探活（随机图床命中死节点时整源图片挂）。",
+    "version": "1.4.2",
+    "description": "18comic 源。fork 修复：域名默认初值消除 baseUrl 崩溃 + 剔除 newsvr 下发死节点(cdnbtd.cc TLS eof) + 图床探活。",
     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/jm.js"
   },
   {
     "name": "动漫屋",
     "fileName": "dm5.js",
     "key": "dm5",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/dm5.js"
   },
@@ -249,7 +249,7 @@
     "name": "Mangabz",
     "fileName": "mangabz.js",
     "key": "mangabz",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/mangabz.js"
   },
@@ -257,7 +257,7 @@
     "name": "极速漫画",
     "fileName": "one_kkk.js",
     "key": "one_kkk",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "免费中文漫画站。上游已删除该源，由 fork 继续维护更新通道。",
     "url": "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/one_kkk.js"
   },
