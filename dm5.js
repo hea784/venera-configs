@@ -2,7 +2,7 @@
 class Dm5Source extends ComicSource {
     name = "动漫屋"
     key = "dm5"
-    version = "0.2.0"
+    version = "0.2.1"
     minAppVersion = "1.6.0"
     url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/dm5.js"
 

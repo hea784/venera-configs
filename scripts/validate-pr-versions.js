@@ -154,6 +154,11 @@ function isConfigFile(filePath) {
   if (!filePath.endsWith(".js")) {
     return false;
   }
+  // 配置源只位于仓库根目录；scripts/ 等子目录里的工具脚本不是配置源，
+  // 不应参与版本校验（之前会把本脚本自身当配置源而误报）。
+  if (filePath.includes("/") || filePath.includes("\\")) {
+    return false;
+  }
   const baseName = path.basename(filePath);
   return !baseName.startsWith("_");
 }

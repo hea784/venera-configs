@@ -5,7 +5,7 @@ class HComic extends ComicSource {
     // Unique id of the source
     key = "hcomic"
 
-    version = "1.0.0"
+    version = "1.0.1"
 
     minAppVersion = "1.6.0"
 

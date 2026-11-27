@@ -2,7 +2,7 @@
 class MangabzSource extends ComicSource {
     name = "Mangabz"
     key = "mangabz"
-    version = "0.2.0"
+    version = "0.2.1"
     minAppVersion = "1.6.0"
     url = "https://cdn.jsdelivr.net/gh/hea784/venera-configs@main/mangabz.js"
 
